@@ -1,7 +1,7 @@
 pipeline {
-    agent {
-        label 'Slave 2'
-    }
+    agent any// {
+    //     label 'Slave 2'
+    // }
     environment {
         foodiesPat = credentials('foodiesPattoken')
         TOMCAT_HOME_DIR="/u01/middleware/apache-tomcat-9.0.70"
@@ -66,10 +66,10 @@ pipeline {
         stage ('deploy the application') {
             steps {
                 sh '''
-                sudo cp /u01/jenkins/workspace/foodiespipeline/target/ foodies.war '$TOMCAT_HOME_DIR'/webapps
-                sudo chown tomcat:tomcat -R '$TOMCAT_HOME_DIR'/webapps
+                sudo cp /u01/jenkins/workspace/foodiespipeline/target/ foodies.war ${TOMCAT_HOME_DIR}/webapps
+                sudo chown tomcat:tomcat -R ${TOMCAT_HOME_DIR}/webapps
                 sudo systemctl restart tomcat
-                sudo su tomcat -c "cat '$TOMCAT_HOME_DIR'/logs/catalina.out"
+                sudo su tomcat -c "cat ${TOMCAT_HOME_DIR}/logs/catalina.out"
                 '''
             }
         }
