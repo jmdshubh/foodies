@@ -5,8 +5,8 @@ After=network.target
 Type=forking
 User=#TOMCAT_USER#
 Group=#TOMCAT_GROUP#
-Environment=JAVA_HOME=#JAVA_HOME#
-Environment=CATALINA_HOME=#TOMCAT_HOME_DIR#
+Environment="JAVA_HOME=#JAVA_HOME#"
+Environment="CATALINA_HOME=#TOMCAT_HOME_DIR#"
 ExecStart=#TOMCAT_HOME_DIR#/bin/startup.sh
 ExecStop=#TOMCAT_HOME_DIR#/bin/shutdown.sh
 Restart=always
