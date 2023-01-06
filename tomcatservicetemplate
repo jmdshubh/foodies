@@ -1,7 +1,7 @@
-[UNIT]
+[Unit]
 Description=Tomcat Server
 After=network.target
-[SERVICE]
+[Service]
 Type=forking
 User=#TOMCAT_USER#
 Group=#TOMCAT_GROUP#
@@ -10,5 +10,5 @@ Environment="CATALINA_HOME=#TOMCAT_HOME_DIR#"
 ExecStart=#TOMCAT_HOME_DIR#/bin/startup.sh
 ExecStop=#TOMCAT_HOME_DIR#/bin/shutdown.sh
 Restart=always
-[INSTALL]
+[Install]
 WantedBy=multi-user.target
