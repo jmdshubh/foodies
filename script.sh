@@ -12,13 +12,17 @@
                     echo "tomcat user is already here"
                 fi
                 sudo su tomcat -c 'wget "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz" -P /u01/middleware/'
-                sudo su tomcat -c "tar -xzvf /u01/middleware/apache-tomcat-9.0.70.tar.gz -C ${TOMCAT_HOME_DIR} "
+                sudo su tomcat -c "tar -xzvf /u01/middleware/apache-tomcat-9.0.70.tar.gz -C /u01/middleware "
                 sudo cp tomcatservicetemplate  /etc/systemd/system/tomcat.service
-                JPATH=$(readlink -f $(which java) | sed 's/bin.*/ /')
-                sudo sed -i 's|#JAVA_HOME#|'$JPATH'|g' /etc/systemd/system/tomcat.service
-                sudo sed -i 's|#TOMCAT_HOME_DIR#|'$TOMCAT_HOME_DIR'|g'  /etc/systemd/system/tomcat.service
-                sudo sed -i 's|#TOMCAT_USER#|tomcat|g'  /etc/systemd/system/tomcat.service 
-                sudo sed -i 's|#TOMCAT_GROUP#|tomcat|g'  /etc/systemd/system/tomcat.service
+                JPATH=$(readlink -f $(which java) | cut -b 35-45 --complement)
+                sudo sed -i "s|#JAVA_HOME#|$JPATH|g" /etc/systemd/system/tomcat.service
+                sudo sed -i "s|#TOMCAT_HOME_DIR#|$TOMCAT_HOME_DIR|g"  /etc/systemd/system/tomcat.service
+                sudo sed -i "s|#TOMCAT_USER#|tomcat|g"  /etc/systemd/system/tomcat.service 
+                sudo sed -i "s|#TOMCAT_GROUP#|tomcat|g"  /etc/systemd/system/tomcat.service 
                 sudo systemctl daemon-reload
                 sudo systemctl enable tomcat
-                sudo systemctl start tomcat 
+                sudo systemctl start tomcat
+                sudo cp /u01/jenkins/workspace/foodiespipeline/target/ foodies.war '$TOMCAT_HOME_DIR'/webapps/
+                sudo chown tomcat:tomcat -R '$TOMCAT_HOME_DIR'/webapps
+                sudo systemctl restart tomcat
+                sudo su tomcat -c "cat '$TOMCAT_HOME_DIR'/logs/catalina.out"
