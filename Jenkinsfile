@@ -1,7 +1,7 @@
 pipeline {
-    agent {
-        label 'Slave 2'
-    }
+    agent any //{
+        //label 'Slave 2'
+    //}
     environment {
         foodiesPat = credentials('foodiesPattoken')
         TOMCAT_HOME_DIR="/u01/middleware/apache-tomcat-9.0.70"
